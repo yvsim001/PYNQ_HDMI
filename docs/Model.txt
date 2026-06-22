@@ -1,0 +1,5 @@
+MODEL_URL =
+"https://github.com/mlcommons/tiny/raw/bceb91c5ad2e2deb295547d81505721d
+3a87d578/benchmark/training/visual_wake_words/trained_models/vww_96.h5"
+MODEL_NAME = "vww_96.h5"
+MODEL_PATH = download_testdata(MODEL_URL, MODEL_NAME, module="model")

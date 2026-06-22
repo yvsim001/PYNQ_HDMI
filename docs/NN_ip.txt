@@ -1,0 +1,101 @@
+Pour utiliser un **DMA (Direct Memory Access)** afin d'envoyer vos images de la mémoire système (RAM gérée par le CPU/Jupyter) vers votre IP `hls4ml` (FPGA Fabric), puis récupérer les prédictions, vous devez modifier l'architecture du code.
+
+Le DMA permet de transférer de grands blocs de données à haute vitesse sans surcharger le processeur, en utilisant le protocole **AXI-Stream**.
+
+Voici comment adapter votre script Jupyter en configurant correctement les buffers mémoires contigus avec `pynq.allocate` :
+
+---
+
+## Code Jupyter avec gestion DMA
+
+```python
+from pynq import Overlay
+from pynq import allocate
+import cv2
+import numpy as np
+import time
+
+# 1. Charger le design (qui contient l'IP hls4ml reliée à un AXI DMA)
+overlay = Overlay("votre_design.bit")
+
+# Accéder à l'IP DMA (vérifiez son nom exact dans votre Block Design Vivado)
+dma = overlay.axi_dma_0
+hls_model = overlay.my_hls4ml_predictor_0
+
+# 2. Allocation des buffers mémoires physiques (Contiguous Memory Allocation)
+# Remplacez les dimensions par celles attendues par votre modèle hls4ml
+INPUT_SHAPE = (1, 32, 32, 3)  # Exemple : Image batch=1, 32x32, 3 canaux (RGB)
+OUTPUT_SHAPE = (1, 10)        # Exemple : 10 classes en sortie
+
+# Allocation des buffers matériels (indispensable pour le DMA)
+# Le dtype doit correspondre au type de données attendu (souvent float32 ou int8/uint8)
+in_buffer = allocate(shape=INPUT_SHAPE, dtype=np.float32)
+out_buffer = allocate(shape=OUTPUT_SHAPE, dtype=np.float32)
+
+# 3. Initialisation de la caméra et du HDMI (comme précédemment)
+hdmi_out = overlay.video.hdmi_out
+hdmi_out.configure(VideoMode(1280, 720, 24))
+hdmi_out.start()
+
+camera = cv2.VideoCapture(0)
+
+print("Système DMA et HDMI prêt.")
+
+try:
+    while True:
+        out_frame = hdmi_out.newframe()
+        ret, frame = camera.read()
+        if not ret:
+            break
+            
+        # --- PRÉTRAITEMENT ---
+        # Redimensionnement pour correspondre à la taille d'entrée de l'accélérateur
+        small_frame = cv2.resize(frame, (INPUT_SHAPE[1], INPUT_SHAPE[2]))
+        # Normalisation (0.0 à 1.0)
+        input_data = small_frame.astype(np.float32) / 255.0
+        # Ajout de la dimension batch si nécessaire
+        input_data = np.expand_dims(input_data, axis=0) 
+        
+        # --- TRANSFERT DMA ET INFÉRENCE ---
+        # 1. Copier les données du tableau CPU vers le buffer physique DMA
+        np.copyto(in_buffer, input_data)
+        
+        # 2. Lancer les transferts DMA (Asynchrones)
+        # On prépare le canal de réception avant d'envoyer pour éviter de rater des données
+        dma.recvchannel.transfer(out_buffer)
+        dma.sendchannel.transfer(in_buffer)
+        
+        # 3. Attendre la fin des transferts (Synchrone)
+        dma.sendchannel.wait()
+        dma.recvchannel.wait()
+        
+        # --- EXPLOITATION DU RÉSULTAT ---
+        # out_buffer contient maintenant les prédictions renvoyées par hls4ml
+        prediction_idx = np.argmax(out_buffer[0])
+        confidence = out_buffer[0][prediction_idx]
+        
+        # --- AFFICHAGE SUPERPOSÉ (HDMI) ---
+        np.copyto(out_frame, frame)
+        label = f"Classe: {prediction_idx} ({confidence:.2f})"
+        cv2.putText(out_frame, label, (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+        
+        hdmi_out.writeframe(out_frame)
+
+except KeyboardInterrupt:
+    print("Arrêt.")
+
+# Libération propre de la mémoire allouée pour le DMA
+in_buffer.close()
+out_buffer.close()
+camera.release()
+hdmi_out.stop()
+
+```
+
+---
+
+## 🛠️ Pièges classiques à éviter avec le DMA et hls4ml
+
+* **Le sens de l'AXI-Stream (`TLAST`)** : L'IP générée par `hls4ml` doit impérativement gérer le signal `TLAST` (qui indique la fin d'un paquet/d'une image). Si vous avez oublié d'activer l'option `IOType: io_stream` et la gestion du `TLAST` dans la configuration YAML de `hls4ml`, le DMA va bloquer (`dma.recvchannel.wait()` va freeze indéfiniment) car il attendra la fin du flux.
+* **La mise en forme des données (Flatten)** : Souvent, `hls4ml` configure l'entrée AXI-Stream comme un vecteur aplati (1D). Si votre modèle attend une image $32 \times 32 \times 3 = 3072$ caractéristiques, assurez-vous d'allouer votre `in_buffer` avec la forme `shape=(3072,)` et d'y copier vos pixels aplatis avec `input_data.flatten()`.
+* **Le type `ap_fixed**` : Si votre modèle HLS utilise des types fractionnaires fixes (ex: `ap_fixed<16,6>`), l'interface AXI-Stream de Pynq transmet généralement ces données packagées dans des entiers (`int16` ou `int32`). Il faut veiller à ce que l'alignement des bits (le *casting*) entre Python et le FPGA soit rigoureusement identique.
