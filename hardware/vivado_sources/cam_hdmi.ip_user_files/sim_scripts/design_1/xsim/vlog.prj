@@ -1,0 +1,17 @@
+verilog xil_defaultlib --include "G:/VIVADO/Vivado/2024.1/data/xilinx_vip/include" --include "../../../../cam_hdmi.gen/sources_1/bd/design_1/ipshared/ec67/hdl" --include "../../../../cam_hdmi.gen/sources_1/bd/design_1/ipshared/b28c/hdl" --include "../../../../cam_hdmi.gen/sources_1/bd/design_1/ipshared/a4a8/hdl" --include "../../../../cam_hdmi.gen/sources_1/bd/design_1/ipshared/3242" \
+"../../../bd/design_1/ip/design_1_ps7_0/sim/design_1_ps7_0.v" \
+"../../../bd/design_1/ip/design_1_v_tpg_0_0/sim/design_1_v_tpg_0_0.v" \
+"../../../bd/design_1/ip/design_1_v_axi4s_vid_out_0_0/sim/design_1_v_axi4s_vid_out_0_0.v" \
+"../../../bd/design_1/ip/design_1_xlconstant_0_0/sim/design_1_xlconstant_0_0.v" \
+"../../../bd/design_1/ip/design_1_xbar_1/sim/design_1_xbar_1.v" \
+"../../../bd/design_1/ip/design_1_xbar_0/sim/design_1_xbar_0.v" \
+"../../../bd/design_1/ip/design_1_clk_wiz_0_1/design_1_clk_wiz_0_1_clk_wiz.v" \
+"../../../bd/design_1/ip/design_1_clk_wiz_0_1/design_1_clk_wiz_0_1.v" \
+"../../../bd/design_1/ip/design_1_auto_pc_0/sim/design_1_auto_pc_0.v" \
+"../../../bd/design_1/ip/design_1_auto_pc_1/sim/design_1_auto_pc_1.v" \
+"../../../bd/design_1/sim/design_1.v" \
+
+verilog xil_defaultlib "glbl.v"
+
+# Do not sort compile order
+nosort

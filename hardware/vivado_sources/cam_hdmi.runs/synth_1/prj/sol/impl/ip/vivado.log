@@ -1,0 +1,47 @@
+#-----------------------------------------------------------
+# Vivado v2024.1 (64-bit)
+# SW Build 5076996 on Wed May 22 18:37:14 MDT 2024
+# IP Build 5075265 on Wed May 22 21:45:21 MDT 2024
+# SharedData Build 5076995 on Wed May 22 18:29:18 MDT 2024
+# Start of session at: Mon Jun 22 11:40:30 2026
+# Process ID: 22868
+# Current directory: C:/work/cam_hdmi/cam_hdmi.runs/synth_1/prj/sol/impl/ip
+# Command line: vivado.exe -notrace -mode batch -source run_ippack.tcl
+# Log file: C:/work/cam_hdmi/cam_hdmi.runs/synth_1/prj/sol/impl/ip/vivado.log
+# Journal file: C:/work/cam_hdmi/cam_hdmi.runs/synth_1/prj/sol/impl/ip\vivado.jou
+# Running On        :VALDERSYM
+# Platform          :Windows Server 2016 or Windows 10
+# Operating System  :26200
+# Processor Detail  :AMD Ryzen 5 5600X 6-Core Processor             
+# CPU Frequency     :3693 MHz
+# CPU Physical cores:6
+# CPU Logical cores :12
+# Host memory       :51458 MB
+# Swap memory       :6979 MB
+# Total Virtual     :58438 MB
+# Available Virtual :23369 MB
+#-----------------------------------------------------------
+source run_ippack.tcl -notrace
+INFO: calling package_hls_ip ip_types=vitis sysgen json_file=C:/work/cam_hdmi/cam_hdmi.runs/synth_1/prj/sol/sol_data.json outdir=C:/work/cam_hdmi/cam_hdmi.runs/synth_1/prj/sol/impl/ip srcdir=C:/work/cam_hdmi/cam_hdmi.runs/synth_1/prj/sol sort_interfaces_ports=false
+INFO: Copied 1 ipmisc file(s) to C:/work/cam_hdmi/cam_hdmi.runs/synth_1/prj/sol/impl/ip/misc
+INFO: Copied 103 verilog file(s) to C:/work/cam_hdmi/cam_hdmi.runs/synth_1/prj/sol/impl/ip/hdl/verilog
+INFO: Copied 70 vhdl file(s) to C:/work/cam_hdmi/cam_hdmi.runs/synth_1/prj/sol/impl/ip/hdl/vhdl
+INFO: Copied 10 swdriver file(s) to C:/work/cam_hdmi/cam_hdmi.runs/synth_1/prj/sol/impl/ip/drivers
+ipx::create_core: Time (s): cpu = 00:00:05 ; elapsed = 00:00:15 . Memory (MB): peak = 618.660 ; gain = 192.742
+INFO: Import ports from HDL: C:/work/cam_hdmi/cam_hdmi.runs/synth_1/prj/sol/impl/ip/hdl/vhdl/design_1_v_tpg_0_0_v_tpg.vhd (design_1_v_tpg_0_0_v_tpg)
+INFO: Add axi4lite interface s_axi_CTRL
+INFO: Add clock interface ap_clk
+INFO: Add reset interface ap_rst_n
+INFO: Add interrupt interface interrupt
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'G:/VIVADO/Vivado/2024.1/data/ip'.
+INFO: Add data interface fid_in
+INFO: Add axi4stream interface m_axis_video
+INFO: Add data interface fid
+INFO: Calling post_process_vitis to specialize IP
+INFO: Calling post_process_sysgen to specialize IP
+Generating sysgen info xml from json file
+INFO: Created IP C:/work/cam_hdmi/cam_hdmi.runs/synth_1/prj/sol/impl/ip/component.xml
+INFO: Created IP archive C:/work/cam_hdmi/cam_hdmi.runs/synth_1/prj/sol/impl/ip/xilinx_com_ip_v_tpg_8_2.zip
+INFO: [Common 17-206] Exiting Vivado at Mon Jun 22 11:41:05 2026...

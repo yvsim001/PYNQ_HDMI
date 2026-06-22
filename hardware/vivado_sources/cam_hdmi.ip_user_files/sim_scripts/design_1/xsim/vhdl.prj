@@ -1,0 +1,15 @@
+vhdl xil_defaultlib  \
+"../../../bd/design_1/ip/design_1_proc_sys_reset_0_0/sim/design_1_proc_sys_reset_0_0.vhd" \
+"../../../bd/design_1/ip/design_1_v_tc_0_0/sim/design_1_v_tc_0_0.vhd" \
+"../../../../cam_hdmi.gen/sources_1/bd/design_1/ipshared/d57c/src/ClockGen.vhd" \
+"../../../../cam_hdmi.gen/sources_1/bd/design_1/ipshared/d57c/src/SyncAsync.vhd" \
+"../../../../cam_hdmi.gen/sources_1/bd/design_1/ipshared/d57c/src/SyncAsyncReset.vhd" \
+"../../../../cam_hdmi.gen/sources_1/bd/design_1/ipshared/d57c/src/DVI_Constants.vhd" \
+"../../../../cam_hdmi.gen/sources_1/bd/design_1/ipshared/d57c/src/OutputSERDES.vhd" \
+"../../../../cam_hdmi.gen/sources_1/bd/design_1/ipshared/d57c/src/TMDS_Encoder.vhd" \
+"../../../../cam_hdmi.gen/sources_1/bd/design_1/ipshared/d57c/src/rgb2dvi.vhd" \
+"../../../bd/design_1/ip/design_1_rgb2dvi_0_0/sim/design_1_rgb2dvi_0_0.vhd" \
+"../../../bd/design_1/ip/design_1_axi_vdma_0_0/sim/design_1_axi_vdma_0_0.vhd" \
+
+# Do not sort compile order
+nosort
